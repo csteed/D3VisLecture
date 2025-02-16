@@ -8,7 +8,6 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 // read the cars data and infer types
 const cars_data = await d3.csv("cars_full.csv", d3.autoType);
-console.log(cars_data);
 
 // calculate mean values for Horsepower and MPG
 const Horsepower_mean = d3.mean(cars_data, d => d.Horsepower);
@@ -21,7 +20,6 @@ const cars_data_clean = cars_data.map(d => {
   d_clean.Horsepower = d_clean.Horsepower === null ? Horsepower_mean : d_clean.Horsepower;
   return d_clean;
 });
-console.log(cars_data_clean);
 
 // create the scatterplot
 const scatterplotSVG = ScatterPlot(cars_data_clean);
