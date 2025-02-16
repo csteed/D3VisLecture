@@ -6,6 +6,91 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 const cars_data = await d3.csv("example.csv", d3.autoType);
 console.log(cars_data);
+
+cars_data_clean = cars_data.map(d => {
+  let d_clean = Object.assign({}, d);
+  d_clean.MPG = d_clean.MPG === null ? MPG_mean : d_clean.MPG;
+  d_clean.Horsepower = d_clean.Horsepower === null ? Horsepower_mean : d_clean.Horsepower;
+  return d_clean;
+});
+console.log(cars_data_clean);
+    
+// ScatterPlot function
+function ScatterPlot(data, {
+  height = 400,
+  width = 400,
+  marginTop = 25,
+  marginRight = 20,
+  marginBottom = 35,
+  marginLeft = 40,
+} = {}) {
+  // create the x-axis scale
+  const x = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.MPG))
+    .range([marginLeft, width - marginRight])
+    .nice();
+
+  // create the y-axis scale
+  const y = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.Horsepower))
+    .range([height - marginBottom, marginTop])
+    .nice();
+
+  // create the color scale
+  const color = d3.scaleOrdinal()
+    .domain([...new Set(data.map(d => d.Origin))].sort())
+    .range(d3.schemeCategory10);
+  
+  // create the SVG container element
+  const svg = d3.create('svg')
+    .attr("viewBox", [0, 0, width, height])
+    .attr('width', width)
+    .attr('height', height)
+    .attr("style", "max-width: 100%; height: auto");
+  
+  // position and populate the x-axis
+  svg.append('g')
+    .attr('transform', `translate(0, ${height - marginBottom})`)
+    .call(d3.axisBottom(x))
+    .call(g => g.select(".domain").remove())
+    .call(g => g.append('text')
+          .attr('x', width)
+          .attr('y', marginBottom -4)
+          .attr('fill', 'black')
+          .attr('text-anchor', 'end')
+          .text('Miles per Gallon →'));
+
+  // position and populate the x-axis
+  svg.append('g')
+    .attr('transform', `translate(${marginLeft}, 0)`)
+    .call(d3.axisLeft(y))
+    .call(g => g.select(".domain").remove())
+    .call(g => g.append('text')
+          .attr('x', -marginLeft)
+          .attr('y', 10)
+          .attr('fill', 'black')
+          .attr('text-anchor', 'start')
+          .text('↑ Horsepower'));
+
+  // add circle elements for each car model
+  const circles = svg
+    .selectAll('circle')
+    .data(data)
+    .join('circle')
+      .attr('opacity', 0.5)
+      .attr('fill', d => color(d.Origin))
+      .attr('cx', d => x(d.MPG))
+      .attr('cy', d => y(d.Horsepower))
+      .attr('r', 4);
+
+  // add tooltips to support interactive investigations
+  circles
+    .append('title')
+    .text(d => `${d.Year.getFullYear()} ${d.Name} ${d.Origin}`);
+            
+  // return the SVG DOM element for display
+  return svg.node();
+}
     
 // // Declare the chart dimensions and margins.
 // const width = 640;
