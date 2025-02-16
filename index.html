@@ -25,8 +25,9 @@ console.log(cars_data_clean);
 // create the scatterplot
 const scatterplotSVG = ScatterPlot(cars_data_clean);
 
-// ppend the scatterplot SVG element
-container.append(scatterplotSVG.node());
+// append the scatterplot SVG element
+// const container = document.getElementById('container');
+container.append(scatterplotSVG);
 
 
   
