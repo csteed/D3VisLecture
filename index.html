@@ -14,7 +14,7 @@ const Horsepower_mean = d3.mean(cars_data, d => d.Horsepower);
 const MPG_mean = d3.mean(cars_data, d => d.MPG);
 
 // replace mean values for nulls
-cars_data_clean = cars_data.map(d => {
+const cars_data_clean = cars_data.map(d => {
   let d_clean = Object.assign({}, d);
   d_clean.MPG = d_clean.MPG === null ? MPG_mean : d_clean.MPG;
   d_clean.Horsepower = d_clean.Horsepower === null ? Horsepower_mean : d_clean.Horsepower;
