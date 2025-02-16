@@ -14,7 +14,12 @@ cars_data_clean = cars_data.map(d => {
   return d_clean;
 });
 console.log(cars_data_clean);
-    
+
+const scatterplotNode = ScatterPlot(cars_data_clean);
+
+// Append the SVG element
+container.append(svg.node());
+  
 // ScatterPlot function
 function ScatterPlot(data, {
   height = 400,
