@@ -2,14 +2,18 @@
 <div id="container"></div>
 <script type="module">
 
+// import the D3 library
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
+// read the cars data and infer types
 const cars_data = await d3.csv("cars_full.csv", d3.autoType);
 console.log(cars_data);
 
+// calculate mean values for Horsepower and MPG
 const Horsepower_mean = d3.mean(cars_data, d => d.Horsepower);
 const MPG_mean = d3.mean(cars_data, d => d.MPG);
-  
+
+// replace mean values for nulls
 cars_data_clean = cars_data.map(d => {
   let d_clean = Object.assign({}, d);
   d_clean.MPG = d_clean.MPG === null ? MPG_mean : d_clean.MPG;
@@ -18,10 +22,13 @@ cars_data_clean = cars_data.map(d => {
 });
 console.log(cars_data_clean);
 
+// create the scatterplot
 const scatterplotNode = ScatterPlot(cars_data_clean);
 
-// Append the SVG element
+// ppend the scatterplot SVG element
 container.append(svg.node());
+
+
   
 // ScatterPlot function (FROM OUR NOTEBOOK)
 function ScatterPlot(data, {
