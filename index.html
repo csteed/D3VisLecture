@@ -23,10 +23,10 @@ const cars_data_clean = cars_data.map(d => {
 console.log(cars_data_clean);
 
 // create the scatterplot
-const scatterplotNode = ScatterPlot(cars_data_clean);
+const scatterplotSVG = ScatterPlot(cars_data_clean);
 
 // ppend the scatterplot SVG element
-container.append(svg.node());
+container.append(scatterplotSVG.node());
 
 
   
